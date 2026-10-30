@@ -27,7 +27,9 @@ Add `--browser` to open a browser automatically.
 ### State and ports
 
 Linked worktrees default to their own `.t3/userdata`, even when `T3CODE_HOME` is set.
-The main checkout defaults to `~/.t3/dev/userdata`. An explicit `--home-dir` wins in both cases.
+Without an explicit home, the main checkout uses `~/.t3/dev`. An explicit `--home-dir`
+wins in either checkout and uses `<home>/userdata`. Outside linked worktrees, `T3CODE_HOME`
+also selects `<home>/userdata`; linked worktrees override that ambient variable with their own `.t3`.
 Never run a development server against the live `~/.t3/userdata`.
 See [test data](../../AGENTS.md#test-data) for copying a consistent database snapshot.
 
@@ -144,8 +146,8 @@ Windows investigation while that suite is not a required gate.
 ### Unused code
 
 `vp run knip:check` checks unused files and dependencies across the repo, then
-unused runtime exports in `apps/server`, `apps/desktop`, `apps/web`, and every internal package under
-`packages/`. CI enforces both checks.
+unused runtime exports in `apps/server`, `apps/desktop`, `apps/web`, and the internal packages
+selected by `knip:check` in the root `package.json`. CI enforces both checks.
 Exported types and Effect schemas are allowed without consumers. The schema preprocessor
 recognizes schema types, including aliases and schema classes; functions that create or decode
 schemas remain checked. Canonical Effect service construction APIs stay exported with an explicit

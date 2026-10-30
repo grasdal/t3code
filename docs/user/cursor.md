@@ -62,7 +62,7 @@ read-only: send messages from the parent thread.
 Runtime modes map to the controls the local SDK exposes: full access disables its sandbox, while
 restricted modes normally enable it. On Windows, Auto and Supervised run without filesystem
 isolation when Cursor Auto-review is enabled, because the SDK does not support a filesystem sandbox
-there. Restricted modes without Auto-review, including the default Auto-accept edits mode, still
+there. Restricted modes without Auto-review, including Auto-accept edits mode, still
 request the sandbox and cannot start on Windows. Explicit sandbox policies remain authoritative,
 including restrictive policies that the Windows SDK rejects. Explicit approval policy overrides
 control Auto-review, which is not represented as an interactive T3 Code approval flow.

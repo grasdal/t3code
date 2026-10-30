@@ -237,7 +237,7 @@ any missing libraries and system fonts with apt; pages that load without text
 can mean the host has no fonts. It is safe to run again. Without `sudo`, it only
 reports what it would change.
 
-The browser always runs in Chrome's sandbox. Where you cannot change the host,
+By default, the browser runs in Chrome's sandbox. Where you cannot change the host,
 set `T3CODE_SERVER_BROWSER_SANDBOX=0` for the environment to run without it.
 
 ## Connect an outside agent
