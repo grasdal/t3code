@@ -2,10 +2,10 @@
 
 > For maintainers. Using T3 Code? See [docs/user](../user/).
 
-This document covers the unified release workflow for stable and nightly desktop releases.
+This document covers the unified release workflow for stable, nightly, and maintainer-preview releases.
 
-Beta is the product label, not a release channel or version suffix. Release channels
-remain stable and nightly. To ship 0.1.0 Beta, use `channel=stable` and
+Beta is the product label, not a release channel or version suffix. Stable and nightly
+remain the user release channels; preview is reserved for maintainer tests. To ship 0.1.0 Beta, use `channel=stable` and
 `version=0.1.0`. Removing the Beta label later is a branding change independent of
 the version.
 
@@ -540,10 +540,10 @@ There is no dry-run tag path. Pushing any accepted non-nightly tag, including
 to validate the workflow.
 
 The workflow has no non-publishing `workflow_dispatch` mode. Use normal CI or local quality gates to
-validate checks and builds without shipping. To exercise the complete release graph at lower stable
-risk, manually dispatch `channel=nightly`; this still publishes a real nightly npm package, GitHub
-prerelease, desktop updater release, hosted nightly alias, and marketing site, but it does not update stable app aliases or
-commit a version bump to `main`. Only run it when a real nightly release is acceptable.
+validate checks and builds without shipping. To exercise the complete release graph for an unmerged branch, use `channel=preview`. This still
+publishes a real GitHub prerelease and npm packages, but does not publish desktop update feeds or
+deploy the hosted app, marketing site, or AUR packages. Use `channel=nightly` only when a real
+nightly release from `main`, including its updater feed and hosted deployments, is acceptable.
 
 Manual `channel=stable` is also a real stable-channel release. Omitting signing secrets only makes
 platform artifacts unsigned; it does not prevent publication.
@@ -644,7 +644,7 @@ Checklist:
    - preflight passes
    - release quality checks pass
    - `build_bundle` and all platform builds pass
-   - `publish_cli` publishes the exact release version before the release job
+   - the release job publishes CLI archives before `publish_cli` publishes the exact npm launcher version
    - release job uploads expected files
 5. Smoke test downloaded artifacts.
 

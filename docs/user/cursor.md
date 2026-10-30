@@ -50,9 +50,9 @@ provider turns. Same-provider Cursor forks use the orchestrator's portable full-
 handoff into a fresh Cursor agent. The SDK has in-process custom callback tools, but the V2 adapter
 intentionally uses the authenticated, thread-scoped MCP server instead.
 
-Portable handoffs summarize eligible timeline items and can omit the end of long messages. Read
-[Context in portable handoffs](./portable-handoffs.md) before using a fork for work whose exact
-instructions must carry forward.
+Portable handoffs select intact user and assistant messages within a budget; messages that do not
+fit remain retrievable from saved history. Read [Context in portable handoffs](./portable-handoffs.md)
+for the selection limits and provider differences.
 
 Cursor task events include an `agentId`, but the local SDK does not register that identifier as a
 resumable agent: `Agent.resume()` returns `AgentNotFoundError`. The adapter therefore does not attach
@@ -62,7 +62,7 @@ read-only: send messages from the parent thread.
 Runtime modes map to the controls the local SDK exposes: full access disables its sandbox, while
 restricted modes normally enable it. On Windows, Auto and Supervised run without filesystem
 isolation when Cursor Auto-review is enabled, because the SDK does not support a filesystem sandbox
-there. Restricted modes without Auto-review, including the default Auto-accept edits mode, still
+there. Restricted modes without Auto-review, including Auto-accept edits mode, still
 request the sandbox and cannot start on Windows. Explicit sandbox policies remain authoritative,
 including restrictive policies that the Windows SDK rejects. Explicit approval policy overrides
 control Auto-review, which is not represented as an interactive T3 Code approval flow.

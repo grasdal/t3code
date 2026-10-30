@@ -1,7 +1,8 @@
 # T3 Code Mobile
 
-> [!WARNING]
-> T3 Code Mobile is currently in development and is not distributed yet. If you want to try it out, you can build it from source.
+T3 Code Mobile is available for [iOS](https://apps.apple.com/us/app/t3-code-remote-claude-more/id6787819824)
+and [Android](https://play.google.com/store/apps/details?id=com.t3tools.t3code).
+The instructions below are for building and developing the app from source.
 
 ## Quickstart
 

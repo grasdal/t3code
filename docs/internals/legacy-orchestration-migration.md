@@ -26,9 +26,10 @@ records as migrated history.
 ## First continuation
 
 A migrated thread has no active provider thread. Its first continuation creates a fresh provider
-session and sends a legacy handoff built only from user and assistant messages. The handoff selects
-the newest transcript suffix within a 32,000-character budget, including section labels and the
-import notice. This budget is separate from portable provider handoffs.
+session and selects intact user and assistant messages through the same budgeted history path
+as a provider switch. Omitted history remains retrievable. A separate diagnostic summary keeps
+the newest transcript suffix within 32,000 characters, including section labels and the import
+notice; it does not replace or limit the history selection. See [context handoffs](./context-handoffs.md).
 
 ## Client and server cutover
 

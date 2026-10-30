@@ -5,9 +5,10 @@ need a separate branch and working directory.
 
 ## Start a thread
 
-On web and desktop, a new thread keeps the current project and carries your model
-and mode selections, unless the destination project has its own model default.
-Its branch and workspace mode come from your configured defaults. To continue in
+On web and desktop, a new thread keeps the current project, model selection, and
+Plan or Build mode, unless the destination project has its own model default.
+Permissions come from the project or environment default, rather than the thread
+you were viewing. Its branch and workspace mode also come from your configured defaults. To continue in
 an existing worktree, use **New thread in this worktree** from the branch toolbar.
 
 When you change a new thread's project, T3 Code stays in the current environment
@@ -62,7 +63,7 @@ files directly; see [Attach files](./composer.md#attach-files).
 On web and desktop, pinning or unpinning a thread keeps the sidebar at your current
 scroll position instead of following the thread to its new place in the list.
 
-Pinning does not prevent automatic settlement. Settling a thread removes its pin.
+Pinned threads are excluded from automatic settlement. Settling a thread manually removes its pin.
 
 On web and desktop, drag a thread between sections to change its state. Drag a thread up into
 the pinned section to pin it at the spot you drop it; drag a pinned thread down into the active

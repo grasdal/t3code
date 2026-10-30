@@ -80,8 +80,9 @@ Then work from evidence, not assumption. In rough order of value:
 - The SQLite database. Read it freely, but only write when a write is necessary
   to fix the problem the user described, and get their explicit permission
   before any write.
-- Service state: is the server installed as a service (systemd, launchd, Windows)?
-  Is it running, crash-looping, or dead? Is its port answering?
+- Service state on Linux or macOS: is the server installed as a service (systemd or
+  launchd)? Is it running, crash-looping, or dead? Is its port answering? Windows
+  does not support T3 background services; check its CLI process or desktop host instead.
 - Harness health: are the user's coding-agent CLIs installed, on PATH, and logged in?
 
 You may be on macOS, Linux, or Windows. Figure out the platform's own tools for

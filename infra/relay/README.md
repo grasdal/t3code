@@ -64,12 +64,14 @@ To run a smaller test set while iterating:
 vp test run src/environments/EnvironmentLinker.test.ts
 ```
 
-Before considering a change complete, run the repository-wide checks from the root:
+Before pushing, run the changed-file checks from the repository root:
 
 ```sh
-vp check
-vp run typecheck
+vp run check:changed
 ```
+
+This follows [the repository verification rules](../../AGENTS.md#verifying). CI owns the full
+test suites; use focused relay tests and typechecks while iterating.
 
 Backend changes should include tests. Prefer testing the real business logic with external
 dependencies represented at their boundary rather than mocking internal behavior.

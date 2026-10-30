@@ -1,19 +1,22 @@
 # Context handoffs
 
-Portable provider and fork handoffs are textual summaries. They do not claim native provider context
-parity.
+Portable provider and fork handoffs transfer a budgeted selection of intact user and assistant
+messages. They do not reconstruct native reasoning, tool-call state, approvals, or attachments.
+The current user input stays separate and is never shortened to make history fit.
 
-`ContextHandoffServiceV2` includes user messages, assistant messages, command executions, file
-changes, checkpoints, and prior handoffs. It skips other turn item types. For text-bearing items,
-`compactText` replaces every whitespace run with one space, trims the result, and returns at most
-240 characters. A truncated value contains the first 237 characters followed by `...`. File changes
-carry the filename, while checkpoints carry only the number of files.
+[`ContextHandoffServiceV2`](../../apps/server/src/orchestration-v2/ContextHandoffService.ts)
+selects eligible history for provider switches, legacy continuation, and fork merge-back.
+Provider handoffs cover either full eligible app history or the delta since the target provider
+last participated. Fork merge-back selects the child's eligible delta. Coverage and omitted-item
+references let the agent retrieve saved history that does not fit.
 
-Provider handoffs use either the full eligible app history or the delta since that provider last
-participated. Fork merge-back handoffs summarize eligible delta items from the child. Neither path
-reconstructs provider-native session state, tool state, approvals, or omitted text.
+The [shared budget](../../packages/provider-core/src/server/handoffBudget.ts) accounts for the
+target model, existing context, current input, attachments, and reserved capacity. See
+[portable handoff limits](../user/portable-handoffs.md#context-limits) for configuration and
+fallback estimates. Codex can receive native historical messages when its installed version
+supports them; other adapters render the same selection as attributed context.
 
-Legacy v1 continuation uses a separate algorithm. It considers only user and assistant messages,
-walks backward from the newest message, and builds a transcript suffix within a 32,000-character
-budget. Do not describe that migration budget as the limit for portable handoffs, and do not describe
-the 240-character prefix as a migration rule.
+The service also retains diagnostic summaries: fork summaries compact eligible activity to
+240-character excerpts, and the legacy migration summary keeps a transcript suffix within
+32,000 characters. Those summaries are separate from the intact message selection used for
+continuation. Neither limit describes the portable history budget.

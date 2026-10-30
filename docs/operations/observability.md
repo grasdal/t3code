@@ -488,7 +488,7 @@ The codebase already uses `Effect.fn("name")` heavily. That should usually be yo
 For ad hoc work:
 
 ```ts
-import { Effect } from "effect";
+import * as Effect from "effect/Effect";
 
 const runThing = Effect.gen(function* () {
   yield* Effect.annotateCurrentSpan({
@@ -544,7 +544,8 @@ yield * Effect.logInfo("starting provider turn");
 yield * Effect.logDebug("waiting for approval response");
 ```
 
-Those messages show up as span events because `Logger.tracerLogger` is installed.
+When no OTLP logs endpoint is configured, `Logger.tracerLogger` records those messages as span
+events. With OTLP logs enabled, they are exported as correlated log records instead.
 
 ### Use The Pipeable Metrics API
 
@@ -573,7 +574,7 @@ The server observability layer is assembled in `apps/server/src/observability/Ob
 It provides:
 
 - pretty stdout logger
-- `Logger.tracerLogger`
+- `Logger.tracerLogger` when OTLP logs are not configured
 - local NDJSON tracer
 - optional OTLP trace exporter
 - optional OTLP metrics exporter

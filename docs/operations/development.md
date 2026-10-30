@@ -27,7 +27,9 @@ Add `--browser` to open a browser automatically.
 ### State and ports
 
 Linked worktrees default to their own `.t3/userdata`, even when `T3CODE_HOME` is set.
-The main checkout defaults to `~/.t3/dev/userdata`. An explicit `--home-dir` wins in both cases.
+Without an explicit home, the main checkout uses `~/.t3/dev`. An explicit `--home-dir`
+wins in either checkout and uses `<home>/userdata`. Outside linked worktrees, `T3CODE_HOME`
+also selects `<home>/userdata`; linked worktrees override that ambient variable with their own `.t3`.
 Never run a development server against the live `~/.t3/userdata`.
 See [test data](../../AGENTS.md#test-data) for copying a consistent database snapshot.
 
@@ -45,7 +47,7 @@ Leave `VITE_HTTP_URL` and `VITE_WS_URL` unset. Vite proxies the backend through 
 origin so the same build works over localhost and remote connections.
 
 Shared runs enable bundled dev to avoid a network round trip for each import level.
-`T3CODE_BUNDLED_DEV=0` opts out when debugging bundler differences. Two reload traps matter
+`T3CODE_BUNDLED_DEV=0` opts out when debugging bundler differences. Three reload traps matter
 when changing this setup:
 
 - The web entry must dynamically import the app so React refresh initializes before application
@@ -144,8 +146,8 @@ Windows investigation while that suite is not a required gate.
 ### Unused code
 
 `vp run knip:check` checks unused files and dependencies across the repo, then
-unused runtime exports in `apps/server`, `apps/desktop`, `apps/web`, and every internal package under
-`packages/`. CI enforces both checks.
+unused runtime exports in `apps/server`, `apps/desktop`, `apps/web`, and the internal packages
+selected by `knip:check` in the root `package.json`. CI enforces both checks.
 Exported types and Effect schemas are allowed without consumers. The schema preprocessor
 recognizes schema types, including aliases and schema classes; functions that create or decode
 schemas remain checked. Canonical Effect service construction APIs stay exported with an explicit
@@ -154,9 +156,9 @@ Named exports in web UI component modules are kept as complete component sets. K
 unused exports in `apps/web/src/components/ui/*.tsx`, while still reporting an entire unused file.
 Use `vp run knip --workspace apps/web` to audit one workspace, including exports,
 or `vp run knip:production --workspace apps/web` to find code kept alive only by tests.
-The full export audit still has findings and is not a repo-wide CI gate. Extend the
-export check's workspace selectors as more workspaces become clean. Review callers before
-deleting code; production mode can also report development scripts and test fixtures.
+Workspaces outside the `knip:check` export selectors are not covered by CI's export audit.
+Review callers before deleting code; production mode can also report development scripts
+and test fixtures.
 Runtime-discovered entrypoints and dependency exceptions belong in [knip.jsonc](../../knip.jsonc).
 
 ## Desktop artifacts
