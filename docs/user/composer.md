@@ -198,10 +198,10 @@ transcription or cancellation; only the message text is sent when you submit.
 ## Queued messages
 
 On web and desktop, the composer shows **Interrupt** while the agent is working and the draft is
-empty. Adding text or attachments replaces it with a steer arrow. Click it to send a message into
-the active turn, or press `Enter` on desktop. Hold `Cmd` on macOS or `Ctrl` on Windows and Linux to
-switch the button to a queue icon. Click while holding that key, or press `Cmd+Enter` or
-`Ctrl+Enter` on desktop, to queue the message for after the active turn.
+empty. With text or attachments, its send action follows your **Follow-up behavior** setting:
+Queue waits for the active turn to finish, and Steer sends into that turn. Hold `Cmd` on macOS or
+`Ctrl` on Windows and Linux while clicking to use the opposite action. See
+[Send while the agent is working](#send-while-the-agent-is-working) for keyboard shortcuts.
 
 Queued messages appear above the composer. Rows show a thumbnail of any attached image alongside
 the text. Drag a row by its handle to reorder it, use the handle's arrow keys, promote the message
