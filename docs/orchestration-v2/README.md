@@ -1,6 +1,17 @@
 # Orchestration V2
 
-This document set describes the target architecture for the next orchestration model. It is not a patch plan for the current implementation and it intentionally ignores migration/backward compatibility. Those concerns should be handled after the target model is coherent.
+This document set preserves the original target design for orchestration V2. V2 is now the
+implemented orchestration model, and design examples below are not an API or migration reference.
+For current constraints, start with the [architecture overview](../internals/overview.md),
+[context handoffs](../internals/context-handoffs.md), and
+[legacy migration](../internals/legacy-orchestration-migration.md). In particular, the durable
+effect outbox described below as a follow-up is implemented in
+[`EventSink`](../../apps/server/src/orchestration-v2/EventSink.ts) and
+[`EffectWorker`](../../apps/server/src/orchestration-v2/EffectWorker.ts).
+
+The original design intentionally left migration and backward compatibility to implementation.
+Keep its proposals in that historical context; deployed event schemas and clients must retain
+the compatibility described in the current internal guides.
 
 V2 is an orchestrator rewrite, not a rewrite of the whole app domain platform. Existing non-orchestration domains, persistence/migration infrastructure, websocket/RPC infrastructure, and projection streaming semantics should be retained unless V2 exposes a concrete orchestration-specific gap.
 

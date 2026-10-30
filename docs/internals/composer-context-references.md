@@ -4,9 +4,8 @@
 
 Inline context references let a user message point at a typed payload from an exact position in
 its prose: an image, a file, a terminal excerpt, a picked page element, a preview annotation, a
-review comment, a file mention, or a skill. This document covers the wire contract and the pure
-codecs. Editor, rendering, and clipboard behaviour land in later PRs and get their own sections
-here as they arrive.
+review comment, a file mention, or a skill. The contract and codecs are shared; editors and
+renderers preserve reference position while resolving payloads through the draft or message records.
 
 ## Two linked concepts
 
@@ -91,13 +90,11 @@ transcript renderer moves to records.
 
 ## Editor model (web and desktop)
 
-`ComposerContextReferenceNode` (`apps/web/src/components/ComposerContextReferenceNode.tsx`) is
-the one inline Lexical node for every context kind. It stores `kind`, `contextId`, `label`, and a
-per-occurrence `referenceId`, and its text content is the canonical link. The prompt string carries
-payload identity and position, so rebuilding the editor restores equivalent chips; it does not
-preserve the editor-local occurrence ids. Old drafts that used the U+FFFC ordinal placeholder
-migrate on hydration: placeholders bind to the terminal contexts in array order, then any context
-the prompt does not mention is prepended as a link.
+The inline `ComposerContextReferenceExtension` in
+[`ComposerPromptEditorTiptap.tsx`](../../apps/web/src/components/ComposerPromptEditorTiptap.tsx)
+represents every context kind. It preserves the canonical link as its source, alongside the kind,
+context id, and label. The draft's Markdown owns payload identity and position; ProseMirror
+positions belong only to the editing document. See [composer coordinates and serialization](./composer-editors.md).
 
 Records stay in the draft store's typed arrays for now. The editor builds a `Map` keyed by
 `contextId` from them (`composerContextRecordsFromDraft`) and provides it through
@@ -106,11 +103,9 @@ the kind's chip; an unknown kind or a missing record renders the unresolved chip
 vanishing. Removing a chip removes only that occurrence; the composer's change handler compares
 the referenced ids against the draft array and drops records no chip points at.
 
-Version 1 deliberately keeps kind presentation explicit in each client instead of exposing a
-runtime handler registry. The contract and codecs are shared; web/desktop render rich chips and
-mobile renders the readable label. Add a registry only when a third-party or runtime-defined kind
-must provide behaviour that cannot ship with the client. Likewise, a durable occurrence id belongs
-in the canonical reference syntax only if a future feature needs to address one occurrence across
+The contract and codecs are shared, while each client owns presentation. Web and desktop use
+context-presentation registries; mobile renders readable labels. A durable occurrence id belongs
+in the canonical reference syntax only if a feature needs to address one occurrence across
 serialization boundaries.
 
 Terminal context now follows the same send path as every other context record: the persisted
@@ -171,8 +166,8 @@ remain only for files no chip references.
 Every copy path writes the canonical Markdown as `text/plain` and, when the selection holds
 chips, a structured fragment under `web application/x-t3-context-fragment+json`
 (`ComposerContextClipboardFragment`: version, source environment/thread/message, records; no
-bytes, no URLs). Composer copy and cut add it through a Lexical command listener; transcript
-selection copy adds it from an `onCopyCapture` on the user message body while chips re-emit their
+bytes, no URLs). Composer copy and cut serialize the ProseMirror selection through the editor's
+clipboard handler; transcript selection copy adds it from an `onCopyCapture` on the user message body while chips re-emit their
 links through `data-markdown-copy`; the whole-message button writes both through `ClipboardItem`
 and falls back to plain text.
 

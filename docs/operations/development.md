@@ -45,7 +45,7 @@ Leave `VITE_HTTP_URL` and `VITE_WS_URL` unset. Vite proxies the backend through 
 origin so the same build works over localhost and remote connections.
 
 Shared runs enable bundled dev to avoid a network round trip for each import level.
-`T3CODE_BUNDLED_DEV=0` opts out when debugging bundler differences. Two reload traps matter
+`T3CODE_BUNDLED_DEV=0` opts out when debugging bundler differences. Three reload traps matter
 when changing this setup:
 
 - The web entry must dynamically import the app so React refresh initializes before application
@@ -154,9 +154,9 @@ Named exports in web UI component modules are kept as complete component sets. K
 unused exports in `apps/web/src/components/ui/*.tsx`, while still reporting an entire unused file.
 Use `vp run knip --workspace apps/web` to audit one workspace, including exports,
 or `vp run knip:production --workspace apps/web` to find code kept alive only by tests.
-The full export audit still has findings and is not a repo-wide CI gate. Extend the
-export check's workspace selectors as more workspaces become clean. Review callers before
-deleting code; production mode can also report development scripts and test fixtures.
+Workspaces outside the `knip:check` export selectors are not covered by CI's export audit.
+Review callers before deleting code; production mode can also report development scripts
+and test fixtures.
 Runtime-discovered entrypoints and dependency exceptions belong in [knip.jsonc](../../knip.jsonc).
 
 ## Desktop artifacts
